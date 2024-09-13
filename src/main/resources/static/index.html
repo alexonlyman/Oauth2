@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Demo</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.get("/user")
+                .done(function(data) {
+                    console.log("Received user data:", data);
+                    if (data.name) {
+                        $("#user-name").text(data.name);
+                        if (data.email) {
+                            $("#user-email").text(data.email);
+                        }
+                        $(".unauthenticated").hide();
+                        $(".authenticated").show();
+                    } else {
+                        console.log("Name is null or undefined");
+                        $(".unauthenticated").show();
+                        $(".authenticated").hide();
+                    }
+                })
+                .fail(function(jqXHR) {
+                    console.log("Error fetching user data:", jqXHR.responseText);
+                    $(".unauthenticated").show();
+                    $(".authenticated").hide();
+                });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Demo</h1>
+    <div class="unauthenticated">
+        <p>To login, click <a href="/oauth2/authorization/github">here</a></p>
+    </div>
+    <div class="authenticated" style="display:none">
+        <p>Logged in as: <span id="user-name"></span></p>
+        <p>Email: <span id="user-email"></span></p>
+        <button onclick="logout()" class="btn btn-primary">Logout</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function logout() {
+        $.post("/logout", function() {
+            $("#user-name").text('');
+            $("#user-email").text('');
+            $(".unauthenticated").show();
+            $(".authenticated").hide();
+        })
+    }
+</script>
+</body>
+</html>

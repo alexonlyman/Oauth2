@@ -1,0 +1,21 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bookDb
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+  application:
+    name: Oauth2
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23liTdu5ipF0cGsai5
+            client-secret: dcde4d970d8db8e42f91fe6ee1db411864975090
+            scope:
+              - read:user
+              - user:email
+
+
